@@ -11,6 +11,12 @@ namespace TextEditorBL
     {
         private readonly Encoding _defaultEncoding = Encoding.GetEncoding(1251);
 
+        public bool IsExist(string filePath)
+        {
+            bool isExist = File.Exists(filePath);
+            return isExist;
+        }
+
         public string GetContent(string filePath)
         {
             return GetContent(filePath, _defaultEncoding);
@@ -22,5 +28,14 @@ namespace TextEditorBL
             return content;
         }
 
+        public void SaveContent(string content, string filePath)
+        {
+            SaveContent(filePath, content, _defaultEncoding);
+        }
+
+        public void SaveContent(string content, string filePath, Encoding encoding)
+        {
+            File.WriteAllText(filePath, content, encoding);
+        }
     }
 }
