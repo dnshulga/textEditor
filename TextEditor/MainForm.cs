@@ -19,7 +19,7 @@ namespace TextEditor
         event EventHandler FileSaveClick;
         event EventHandler ContentChanged;
     }
-       
+
 
     public partial class MainForm : Form, IMainForm
     {
@@ -29,6 +29,8 @@ namespace TextEditor
             butOpenFile.Click += new EventHandler(ButOpenFile_Click);
             butSaveFile.Click += new EventHandler(butSaveClick);
             fldContent.TextChanged += new EventHandler(fldContent_TextChanged);
+            butSelectFile.Click += new EventHandler(butSelectFile_Click);
+            numFont.ValueChanged += new EventHandler(numFont_ValueChanged);
         }
 
         #region Проброс событий
@@ -36,7 +38,7 @@ namespace TextEditor
         {
             if (FileOpenClick != null) FileOpenClick(this, EventArgs.Empty);
         }
-        
+
         private void butSaveClick(object sender, EventArgs e)
         {
             if (FileSaveClick != null) FileSaveClick(this, EventArgs.Empty);
@@ -59,15 +61,33 @@ namespace TextEditor
             get { return fldContent.Text; }
             set { fldContent.Text = value; }
         }
-        
+
         public void SetSymbolCount(int count)
         {
             lblSymbol.Text = count.ToString();
         }
-        
+
         public event EventHandler FileOpenClick;
         public event EventHandler FileSaveClick;
         public event EventHandler ContentChanged;
         #endregion
+
+        private void butSelectFile_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "Текстовые файлы|*.txt|Все файлы|*.*";
+
+            if (dlg.ShowDialog()==DialogResult.OK)
+            {
+                fldFilePath.Text = dlg.FileName;
+
+                if (FileOpenClick != null) FileOpenClick(this, EventArgs.Empty);
+            }
+        }
+
+        private void numFont_ValueChanged(object sender, EventArgs e)
+        {
+            fldContent.Font = new Font("Calibri", (float)numFont.Value);
+        }
     }
 }
