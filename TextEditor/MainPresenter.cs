@@ -9,6 +9,8 @@ namespace TextEditor
         private readonly IFileManager _manager;
         private readonly IMessageService _messageservice;
 
+        private string _currentFilePath;
+
         public MainPresenter(IMainForm view, IFileManager manager, IMessageService service)
         {
             _view = view;
@@ -16,8 +18,23 @@ namespace TextEditor
             _messageservice = service;
 
             _view.SetSymbolCount(0);
-            _view.ContentChanged +=new EventHandler(_view_ContentChanged);
+            _view.ContentChanged += new EventHandler(_view_ContentChanged);
             _view.FileOpenClick += new EventHandler(_view_FileOpenClick);
+            _view.FileSaveClick += new EventHandler(_view_FileSaveClick);
+        }
+
+        private void _view_FileSaveClick(object sender, EventArgs e)
+        {
+            try
+            {
+                string content = _view.Content;
+                _manager.SaveContent(content, _currentFilePath);
+                _messageservice.ShowMessage("Файл успешно сохранен");
+            }
+            catch (Exception exc)
+            {
+                _messageservice.ShowError(exc.Message);
+            }
         }
 
         private void _view_FileOpenClick(object sender, EventArgs e)
