@@ -37,5 +37,11 @@ namespace TextEditorBL
         {
             File.WriteAllText(filePath, content, encoding);
         }
+
+        public int GetSymbolCount(string content)
+        {
+            int count = content.Length;
+            return count;
+        }
     }
 }
